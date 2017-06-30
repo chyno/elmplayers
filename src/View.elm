@@ -19,7 +19,7 @@ page : Model -> Html Msg
 page model =
     case model.route of
         Models.PlayersRoute ->
-            Players.List.view model.players
+            Players.List.view model.filter model.players 
 
         Models.PlayerRoute id ->
             playerEditPage model id
@@ -27,6 +27,10 @@ page model =
         Models.NotFoundRoute ->
             notFoundView
 
+        Models.AddPlayerRoute ->
+           Players.Edit.view Models.initialPlayer
+        
+ 
 
 playerEditPage : Model -> PlayerId -> Html Msg
 playerEditPage model playerId =

@@ -32,6 +32,10 @@ update msg model =
 
         Msgs.OnPlayerSave (Err error) ->
             ( model, Cmd.none )
+        Msgs.Setfilter fltr ->
+            ( { model | filter = fltr }, Cmd.none )
+        Msgs.Filter  ->
+            ( model, Cmd.none )
 
 
 updatePlayer : Model -> Player -> Model
@@ -50,3 +54,4 @@ updatePlayer model updatedPlayer =
             RemoteData.map updatePlayerList model.players
     in
         { model | players = updatedPlayers }
+

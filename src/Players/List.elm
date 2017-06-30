@@ -1,18 +1,18 @@
 module Players.List exposing (..)
-
+import Html.Events exposing (..)
 import Html exposing (..)
-import Html.Attributes exposing (class, href)
+import Html.Attributes exposing (..)
 import Models exposing (Player)
 import Msgs exposing (Msg)
 import RemoteData exposing (WebData)
 import Routing exposing (playerPath)
+import Json.Decode as Json
 
-
-view : WebData (List Player) -> Html Msg
-view response =
+view : String ->  WebData (List Player) -> Html Msg
+view fltr response =
     div []
         [ nav
-        , maybeList response
+        , maybeList fltr response
         ]
 
 
@@ -22,8 +22,8 @@ nav =
         [ div [ class "left p2" ] [ text "Players" ] ]
 
 
-maybeList : WebData (List Player) -> Html Msg
-maybeList response =
+maybeList : String ->  WebData (List Player) -> Html Msg
+maybeList fltr response =
     case response of
         RemoteData.NotAsked ->
             text ""
@@ -32,7 +32,9 @@ maybeList response =
             text "Loading..."
 
         RemoteData.Success players ->
-            list players
+            players |>
+            filterPlayers fltr |>
+            list  
 
         RemoteData.Failure error ->
             text (toString error)
@@ -41,7 +43,9 @@ maybeList response =
 list : List Player -> Html Msg
 list players =
     div [ class "p2" ]
-        [ table []
+        [ 
+            filterPlayerPage,
+            table []
             [ thead []
                 [ tr []
                     [ th [] [ text "Id" ]
@@ -54,7 +58,6 @@ list players =
             ]
         ]
 
-
 playerRow : Player -> Html Msg
 playerRow player =
     tr []
@@ -65,6 +68,10 @@ playerRow player =
             [ editBtn player ]
         ]
 
+addBtn :  Html.Html Msg
+addBtn  =
+  a [class "btn regular" , href "path" ]
+    [ i [ class "fa fa-pencil mr1" ] [], text "Add" ]
 
 editBtn : Player -> Html.Html Msg
 editBtn player =
@@ -77,3 +84,39 @@ editBtn player =
             , href path
             ]
             [ i [ class "fa fa-pencil mr1" ] [], text "Edit" ]
+
+filterPlayerPage :  Html Msg
+filterPlayerPage   =
+  div 
+  []
+  [
+      label[][text "Filter:"],
+      input
+      [
+         placeholder "Search by Name"
+         , onInput Msgs.Setfilter
+         , onBlur Msgs.Filter 
+         , onEnter Msgs.Filter
+             
+      ]
+      [] ,
+      addBtn 
+  ]
+
+filterPlayers : String -> List Player -> List Player
+filterPlayers filterstr players =
+  if String.isEmpty filterstr then
+    players
+  else
+   List.filter  (\ cp  -> String.contains filterstr  cp.name) players
+         
+onEnter : Msg -> Attribute Msg
+onEnter msg =
+    let
+        isEnter code =
+            if code == 13 then
+                Json.succeed msg
+            else
+                Json.fail "not ENTER"
+    in
+      on "keydown" (Json.andThen isEnter keyCode)

@@ -70,4 +70,4 @@ listBtn =
         [ class "btn regular"
         , href playersPath
         ]
-        [ i [ class "fa fa-chevron-left mr1" ] [], text "List" ]
+        [ i [ class "fa fa-chevron-left mr1" ] [], text "Player List" ]

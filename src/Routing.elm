@@ -32,3 +32,7 @@ playersPath =
 playerPath : PlayerId -> String
 playerPath id =
     "#players/" ++ id
+
+newplayerPath :  String
+newplayerPath =
+    "#players/-1"

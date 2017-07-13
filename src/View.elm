@@ -28,7 +28,7 @@ page model =
             notFoundView
 
         Models.AddPlayerRoute ->
-           Players.Edit.view Models.initialPlayer
+           Players.Edit.newview Models.initialPlayer
         
  
 

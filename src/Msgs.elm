@@ -12,6 +12,7 @@ type Msg
     | ChangeLevel Player Int
     | OnPlayerSave (Result Http.Error Player)
     | Setfilter String
-    | Filter
+    | AddNew 
+    | UpdateName String
 
 

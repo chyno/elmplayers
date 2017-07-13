@@ -34,8 +34,10 @@ update msg model =
             ( model, Cmd.none )
         Msgs.Setfilter fltr ->
             ( { model | filter = fltr }, Cmd.none )
-        Msgs.Filter  ->
-            ( model, Cmd.none )
+        Msgs.AddNew   ->
+        (model , Cmd.none)
+        Msgs.UpdateName name ->
+          ({model | newName = name}, Cmd.none)
 
 
 updatePlayer : Model -> Player -> Model

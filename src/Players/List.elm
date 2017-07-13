@@ -5,7 +5,7 @@ import Html.Attributes exposing (..)
 import Models exposing (Player)
 import Msgs exposing (Msg)
 import RemoteData exposing (WebData)
-import Routing exposing (playerPath)
+import Routing exposing (playerPath, newplayerPath)
 import Json.Decode as Json
 
 view : String ->  WebData (List Player) -> Html Msg
@@ -70,7 +70,7 @@ playerRow player =
 
 addBtn :  Html.Html Msg
 addBtn  =
-  a [class "btn regular" , href "path" ]
+  a [class "btn regular" , href  newplayerPath ]
     [ i [ class "fa fa-pencil mr1" ] [], text "Add" ]
 
 editBtn : Player -> Html.Html Msg
@@ -95,8 +95,7 @@ filterPlayerPage   =
       [
          placeholder "Search by Name"
          , onInput Msgs.Setfilter
-         , onBlur Msgs.Filter 
-         , onEnter Msgs.Filter
+         
              
       ]
       [] ,

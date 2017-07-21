@@ -59,7 +59,10 @@ savePlayerCmd player =
     savePlayerRequest player
         |> Http.send Msgs.OnPlayerSave
 
-
+addPlayerCmd : Player -> Cmd Msg
+addPlayerCmd player =
+    addPlayerRequest player
+        |> Http.send Msgs.OnPlayerAdd
 
 -- DECODERS
 

@@ -19,8 +19,7 @@ view model =
 newview : Player -> Html.Html Msg
 newview model =
     div []
-        [ nav model
-        , formnew model
+        [  formnew model
         ]
 
 nav : Player -> Html.Html Msg
@@ -40,8 +39,11 @@ formnew player =
     div [ class "m3" ]
         [
             input [ placeholder "Add Name", onInput Msgs.UpdateName] [],
-            button [onClick Msgs.AddNew][text "Add"]
-            ]
+            a [ class "btn regular" , href playersPath , onClick Msgs.AddNew]
+              [  text "Save" ],
+            a [ class "btn regular" , href playersPath ]
+              [  text "Cancel" ]            
+        ]
 
 formLevel : Player -> Html.Html Msg
 formLevel player =

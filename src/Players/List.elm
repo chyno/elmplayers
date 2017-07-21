@@ -94,9 +94,7 @@ filterPlayerPage   =
       input
       [
          placeholder "Search by Name"
-         , onInput Msgs.Setfilter
-         
-             
+         , onInput Msgs.Setfilter       
       ]
       [] ,
       addBtn 

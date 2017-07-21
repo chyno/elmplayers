@@ -1,7 +1,7 @@
 module Update exposing (..)
 
 import Commands exposing (savePlayerCmd)
-import Models exposing (Model, Player)
+import Models exposing (Model, Player,initialPlayer)
 import Msgs exposing (Msg)
 import Routing exposing (parseLocation)
 import RemoteData
@@ -32,10 +32,20 @@ update msg model =
 
         Msgs.OnPlayerSave (Err error) ->
             ( model, Cmd.none )
+        
+        Msgs.OnPlayerAdd  (Ok player) ->
+             ( model, Cmd.none )
+        Msgs.OnPlayerAdd (Err error) ->
+            ( model, Cmd.none )
         Msgs.Setfilter fltr ->
             ( { model | filter = fltr }, Cmd.none )
-        Msgs.AddNew   ->
-        (model , Cmd.none)
+        Msgs.AddNew  ->
+         let
+                newPlayer =
+                    { initialPlayer | name = model.newName }
+            in
+                ( model, savePlayerCmd newPlayer )
+
         Msgs.UpdateName name ->
           ({model | newName = name}, Cmd.none)
 
@@ -57,3 +67,4 @@ updatePlayer model updatedPlayer =
     in
         { model | players = updatedPlayers }
 
+ 

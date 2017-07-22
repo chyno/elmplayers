@@ -19,6 +19,12 @@ update msg model =
                     parseLocation location
             in
                 ( { model | route = newRoute }, Cmd.none )
+        Msgs.AddNew  ->
+         let
+            newPlayer =
+              { initialPlayer | name = model.newName, id =  (nextid model.players) }
+         in
+              ( model, savePlayerCmd newPlayer )
 
         Msgs.ChangeLevel player howMuch ->
             let
@@ -26,29 +32,23 @@ update msg model =
                     { player | level = player.level + howMuch }
             in
                 ( model, savePlayerCmd updatedPlayer )
-
         Msgs.OnPlayerSave (Ok player) ->
             ( updatePlayer model player, Cmd.none )
-
         Msgs.OnPlayerSave (Err error) ->
-            ( model, Cmd.none )
-        
+            ( model, Cmd.none ) 
         Msgs.OnPlayerAdd  (Ok player) ->
-             ( model, Cmd.none )
+             ((addPlayerToModel model player), Cmd.none )
         Msgs.OnPlayerAdd (Err error) ->
             ( model, Cmd.none )
         Msgs.Setfilter fltr ->
             ( { model | filter = fltr }, Cmd.none )
-        Msgs.AddNew  ->
-         let
-                newPlayer =
-                    { initialPlayer | name = model.newName }
-            in
-                ( model, savePlayerCmd newPlayer )
-
         Msgs.UpdateName name ->
           ({model | newName = name}, Cmd.none)
 
+addPlayerToModel : Model  -> Player -> Model
+addPlayerToModel model newplayer= 
+ model
+ 
 
 updatePlayer : Model -> Player -> Model
 updatePlayer model updatedPlayer =
@@ -67,4 +67,21 @@ updatePlayer model updatedPlayer =
     in
         { model | players = updatedPlayers }
 
- 
+
+greatestid : Player -> Int -> Int
+greatestid  curplayer gid =
+   let
+     playerid = Result.withDefault 0 (String.toInt curplayer.id)
+   in
+     if (playerid > gid) then
+       playerid
+     else
+       gid
+
+nextid :  RemoteData.RemoteData e (List Player) -> String
+nextid rd =
+  case rd of
+    RemoteData.Success  playerlist ->
+      1 + (playerlist |> List.foldr greatestid 0 ) |> toString 
+    _  ->
+       "0"

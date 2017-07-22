@@ -31,7 +31,6 @@ page model =
            Players.Edit.newview Models.initialPlayer
         
  
-
 playerEditPage : Model -> PlayerId -> Html Msg
 playerEditPage model playerId =
     case model.players of
@@ -54,7 +53,6 @@ playerEditPage model playerId =
 
                     Nothing ->
                         notFoundView
-
         RemoteData.Failure err ->
             text (toString err)
 

@@ -14,7 +14,6 @@ matchers =
          , map AddPlayerRoute (s "newplayer")
         ]
 
-
 parseLocation : Location -> Route
 parseLocation location =
     case (parseHash matchers location) of

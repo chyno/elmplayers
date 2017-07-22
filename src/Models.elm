@@ -34,7 +34,7 @@ type alias Player =
 initialPlayer : Player
 initialPlayer  =
  {
-    id = "3"
+    id = "0"
     , name = ""
     , level = 0
  }

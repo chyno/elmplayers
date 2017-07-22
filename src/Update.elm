@@ -1,6 +1,6 @@
 module Update exposing (..)
 
-import Commands exposing (savePlayerCmd)
+import Commands exposing (savePlayerCmd, addPlayerCmd)
 import Models exposing (Model, Player,initialPlayer)
 import Msgs exposing (Msg)
 import Routing exposing (parseLocation)
@@ -24,7 +24,7 @@ update msg model =
             newPlayer =
               { initialPlayer | name = model.newName, id =  (nextid model.players) }
          in
-              ( model, savePlayerCmd newPlayer )
+              ( model, addPlayerCmd newPlayer )
 
         Msgs.ChangeLevel player howMuch ->
             let
@@ -39,7 +39,7 @@ update msg model =
         Msgs.OnPlayerAdd  (Ok player) ->
              ((addPlayerToModel model player), Cmd.none )
         Msgs.OnPlayerAdd (Err error) ->
-            ( model, Cmd.none )
+            ( {model | filter = (toString error)}, Cmd.none )
         Msgs.Setfilter fltr ->
             ( { model | filter = fltr }, Cmd.none )
         Msgs.UpdateName name ->
@@ -47,7 +47,12 @@ update msg model =
 
 addPlayerToModel : Model  -> Player -> Model
 addPlayerToModel model newplayer= 
- model
+  case model.players of
+    RemoteData.Success  playerlist ->
+      {model | players = (RemoteData.succeed (newplayer::playerlist)) }
+    _  ->
+      model
+
  
 
 updatePlayer : Model -> Player -> Model
